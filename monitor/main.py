@@ -30,6 +30,10 @@ def load_rule(file):
 
 def index_samples():
     files = set()
+    try:
+        os.listdir("samples")
+    except FileNotFoundError:
+        os.makedirs("samples")
     for dir in os.listdir("samples"):
         for file in os.listdir(f"samples/{str(dir)}"):
             files.add(str(f"samples/{str(dir)}/{str(file)}"))

@@ -1,5 +1,8 @@
-# Ignore Test Rules
-rules/*
+# Ignore local rules
+*.yar
+
+# Ignore samples
+samples/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
