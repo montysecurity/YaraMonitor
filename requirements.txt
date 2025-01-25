@@ -1,0 +1,5 @@
+yara-python
+requests
+pyzipper
+discord_webhook
+tqdm
