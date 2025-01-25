@@ -62,7 +62,7 @@ def main():
         remove_samples(samples_matched)
     while True:
         i += 1
-        if i > 5:
+        if i > 100:
             alert(message="[+] Still Running YaraMonitor")
             i = 0
         run_ingestion()
