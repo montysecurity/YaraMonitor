@@ -3,4 +3,3 @@ requests
 pyzipper
 discord_webhook
 tqdm
-yara
