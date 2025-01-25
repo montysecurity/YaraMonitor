@@ -9,7 +9,7 @@ It currently monitors:
 
 - `rules` = place yara rules here, do not create sub-folders
 - `sources` = python scripts to ingest data from various sources, must be called by `monitor/main.py` in the `run_ingestion()` function
-- `samples` = scripts in `sources` download samples to this directory, in a subfolder for each script
+- `samples` = scripts in `sources` download samples to this directory, in a subfolder for each script (created at run time)
 
 ## Caution
 
