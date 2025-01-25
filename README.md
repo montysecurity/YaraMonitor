@@ -28,7 +28,7 @@ The `samples` directory will contain live malware (with executable extensions).
 
 ```
 git clone https://github.com/montysecurity/yaramonitor.git
-cd YaraMonitor
+cd yaramonitor
 # [Activate Python venv, optional, recommended]
 python -m pip install -r requirements.txt
 python main/main.py
