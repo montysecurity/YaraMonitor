@@ -39,8 +39,7 @@ def index_samples():
             files.add(str(f"samples/{str(dir)}/{str(file)}"))
     return files
 
-def alert(rule, sample):
-    message = f"[+] {str(rule)} triggered on {str(sample)}"
+def alert(message):
     print(message)
     DiscordWebhook(url=discord, content=message).execute()
 
@@ -54,6 +53,7 @@ def remove_samples(samples_matched):
             os.remove(sample)
 
 def main():
+    i = 0
     global samples_scanned
     samples_scanned = set()
     global samples_matched
@@ -61,6 +61,10 @@ def main():
     if wipe:
         remove_samples(samples_matched)
     while True:
+        i += 1
+        if i > 5:
+            alert(message="[+] Still Running YaraMonitor")
+            i = 0
         run_ingestion()
         rules = index_rules()
         samples = index_samples()
@@ -81,15 +85,11 @@ def main():
                 yara_matches = yara_rule.match(sample)
                 samples_scanned.add(hex_dig)
                 if len(yara_matches) > 0:
-                    alert(rule, sample)
+                    message = f"[+] {str(rule)} triggered on {str(sample)}"
+                    alert(message)
                     samples_matched.add(hex_dig)
         # keep track of samples scanned for the lifetime of the program
         samples_scanned = samples_scanned | hash_list_buf
-        print("[+] Scanned all files!")
-        print("[+] Removing those without a yara match")
         remove_samples(samples_matched)
-        print("[+] Sleeping for 1 minute...")
-        for i in tqdm(range(60)):
-            sleep(1)
 
 main()
