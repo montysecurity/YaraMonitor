@@ -78,6 +78,7 @@ def main():
                 hash_object = hashlib.sha256(sample.encode())
                 hex_dig = hash_object.hexdigest()
                 if hex_dig in samples_matched:
+                    print(f"[+] Skipping {sample} as it has already been scanned")
                     continue
                 # Temporary buffer of samples scanned in this loop
                 hash_list_buf.add(hex_dig)
