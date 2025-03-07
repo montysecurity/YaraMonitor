@@ -21,7 +21,7 @@ Usage: `asyncrat-config-extractor.py asyncrat.bin`
 
 import clr,os,base64,binascii,hmac,hashlib,sys
 current_dir = os.getcwd()
-os.chdir("/modules/asyncrat_extract_config/")
+os.chdir("../modules/asyncrat_extract_config/")
 current_dir = os.getcwd()
 #Open dlib.dll from current directory
 clr.AddReference(current_dir + "dnlib.dll")
