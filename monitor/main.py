@@ -10,11 +10,13 @@ parser.add_argument("-d", "--discord", type=str, default=None, help="Send result
 parser.add_argument("-w", "--wipe", action="store_true", help="Remove existing files from samples directory when the script starts")
 parser.add_argument("-l", "--low-storage-mode", action="store_true", help="Automatically delete all samples, regardless of match")
 parser.add_argument("-m", "--module", type=str, default=None, help="Invoke module code on samples (NOT OFFICIALLY SUPPORTED YET; WORK IN PROGRESS)")
+parser.add_argument("-s", "--scan-only", action='store_true', default=False, help="Skip ingestion, just can yara rules")
 args = parser.parse_args()
 discord = args.discord
 wipe = args.wipe
 auto_delete_all = args.low_storage_mode
 module = args.module
+scan_only = args.scan_only
 
 def run_ingestion():
     import malwareBazaar
@@ -70,7 +72,8 @@ def main():
         if i > 100:
             alert(message="[+] Still Running YaraMonitor")
             i = 0
-        run_ingestion()
+        if not scan_only:
+            run_ingestion()
         rules = index_rules()
         samples = index_samples()
         hash_list_buf = set()
