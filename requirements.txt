@@ -8,3 +8,4 @@ tqdm
 ## asyncrat extract config
 backports.pbkdf2
 pythonnet
+pycryptodome

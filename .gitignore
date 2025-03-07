@@ -4,6 +4,9 @@
 # Ignore samples
 samples/
 
+*.json
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

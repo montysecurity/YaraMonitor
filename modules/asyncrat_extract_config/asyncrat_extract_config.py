@@ -18,15 +18,22 @@ Usage: `asyncrat-config-extractor.py asyncrat.bin`
 (Ensure that you have a copy of dnlib.dll in the same directory as this script)
 
 """
-import clr,os,base64,binascii,hmac,hashlib,sys
+import clr,os,base64,binascii,hmac,hashlib,sys,json
+from time import sleep
 
-print(f"[+] Running {sys.argv[0]} on {sys.argv[1]}")
+# got the extraction working, suppressing errors
+class DevNull:
+    def write(self, msg):
+        pass
+
+sys.stderr = DevNull()
+
 current_dir = os.getcwd()
-print(os.getcwd())
-os.chdir("../modules/asyncrat_extract_config/")
+#print(os.getcwd())
+os.chdir("modules/asyncrat_extract_config/")
 current_dir = os.getcwd()
 #Open dlib.dll from current directory
-clr.AddReference(current_dir + "dnlib.dll")
+clr.AddReference(current_dir + "/dnlib.dll")
 from dnlib.DotNet import ModuleDefMD
 from dnlib.DotNet.Emit import OpCodes
 from Crypto.Cipher import AES
@@ -35,11 +42,13 @@ from backports.pbkdf2 import pbkdf2_hmac
 #read the 1st argument containing filename to open
 try:
     #filename = current_dir + "\\" + sys.argv[1]
+    #print(current_dir)
+    #print(sys.argv[1])
     filename = sys.argv[1]
-    print("Loading File: " + filename)
+    #print("Loading File: " + filename)
     module = ModuleDefMD.Load(filename)
 except Exception as e:
-    print("Unable to open file. Please ensure you have entered a filename as an argument")
+    #print("Unable to open file. Please ensure you have entered a filename as an argument")
     sys.exit(1)
 
 #Temporarily read file so that sha256 can be calculated. 
@@ -48,7 +57,7 @@ try:
     data = f.read()
     f.close()
     sha_256 = "".join(x for x in str(hashlib.sha256(data).hexdigest()))
-    print("SHA256: " + sha_256)
+    #print("SHA256: " + sha_256)
 except:
     pass
 
@@ -177,7 +186,10 @@ this_key = derive_aes_key(settings_key,salt,32)
 auth_key = derive_aes_key(settings_key,salt,96)
 auth_key = auth_key[32:]
 
+new_dict = {}
+
 #Enumerate encrypted config and decrypt/print as appropriate
+valid_decryption = False
 for name in reversed(name_mappings.keys()):
     try: 
         enc = name_mappings[name]
@@ -189,6 +201,28 @@ for name in reversed(name_mappings.keys()):
             out += chr(i)
         out2 = "".join(letter for letter in out if letter.isprintable())
         if len(out) < 100:
-            print(name.split("::")[1] + ": " + out2)
+            valid_decryption = True
+            #print(name.split("::")[1] + ": " + out2)
+            new_dict[name.split("::")[1]] = out2
     except:
         continue
+
+if valid_decryption:
+    new_dict["SHA256"] = sha_256
+    print(f"[+] Extracted AsyncRAT Config: {new_dict}")
+    fname = "asyncrat_configs.json"
+
+    f = open(fname, "w+")
+    f.write(str(json.dumps(new_dict)))
+    f.close()
+
+    sleep(1)
+    f = open(fname, "r")
+    lines = f.readlines()
+    f.close()
+    if len(lines) != len(set(lines)):
+        os.remove(fname)
+        f = open(fname, "a")
+        for line in set(lines):
+            f.write(line)
+        f.close()

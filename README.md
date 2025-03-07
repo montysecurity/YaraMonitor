@@ -10,6 +10,7 @@ It currently monitors:
 - `rules` = place yara rules here, do not create sub-folders
 - `sources` = python scripts to ingest data from various sources, must be called by `monitor/main.py` in the `run_ingestion()` function
 - `samples` = scripts in `sources` download samples to this directory, in a subfolder for each script (created at run time)
+- `modules` = extra Python code to process samples, done after removing non-matches
 
 ## Caution
 
@@ -52,3 +53,9 @@ So long as the program is running and memory is retained, the following are true
 - Samples that have a yara match are not deleted
 - The process will not re-download samples that have already been downloaded and scanned, even if they have already been deleted
 - The process will not re-scan samples that have already been scanned with the yara rules
+
+## Modules
+
+Modules are meant to extend the analytical capabilties of the tool. For example, there is a module to extract configs from AsyncRAT and store them in a local JSON file (inspired by https://github.com/embee-research/Asyncrat-Venom-Dcrat-Config-Extractor). It can be called using `python.exe monitor/main.py -m "asyncrat_extract_config"`
+
+For future module development, the intention is for the module name used in the parameter be exactly the same name as the folder it resides in.
