@@ -6,7 +6,7 @@ from tqdm import tqdm
 sys.path.insert(1, "sources")
 
 parser = argparse.ArgumentParser(description="YaraMonitor: Monitor malware sources with a set of Yara rules")
-parser.add_argument("-d", "--discord", type=str, defualt=None, help="Send results to Discord Webhook provided")
+parser.add_argument("-d", "--discord", type=str, default=None, help="Send results to Discord Webhook provided")
 parser.add_argument("-w", "--wipe", action="store_true", help="Remove existing files from samples directory when the script starts")
 #parser.add_argument("-l", "--low-storage-mode", action="store_true", help="Automatically delete all samples, regardless of match")
 parser.add_argument("-m", "--module", type=str, default=None, help="Invoke module code on samples (NOT OFFICIALLY SUPPORTED YET; WORK IN PROGRESS)")
