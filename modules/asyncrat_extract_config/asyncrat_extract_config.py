@@ -23,6 +23,7 @@ print(f"[+] Running {sys.argv[0]} on {sys.argv[1]}")
 
 import clr,os,base64,binascii,hmac,hashlib,sys
 current_dir = os.getcwd()
+print(os.getcwd())
 os.chdir("../modules/asyncrat_extract_config/")
 current_dir = os.getcwd()
 #Open dlib.dll from current directory
