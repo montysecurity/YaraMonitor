@@ -19,6 +19,8 @@ Usage: `asyncrat-config-extractor.py asyncrat.bin`
 
 """
 
+print(f"[+] Running {sys.argv[0]} on {sys.argv[1]}")
+
 import clr,os,base64,binascii,hmac,hashlib,sys
 current_dir = os.getcwd()
 os.chdir("../modules/asyncrat_extract_config/")
