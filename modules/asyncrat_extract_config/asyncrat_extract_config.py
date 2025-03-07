@@ -18,10 +18,9 @@ Usage: `asyncrat-config-extractor.py asyncrat.bin`
 (Ensure that you have a copy of dnlib.dll in the same directory as this script)
 
 """
+import clr,os,base64,binascii,hmac,hashlib,sys
 
 print(f"[+] Running {sys.argv[0]} on {sys.argv[1]}")
-
-import clr,os,base64,binascii,hmac,hashlib,sys
 current_dir = os.getcwd()
 print(os.getcwd())
 os.chdir("../modules/asyncrat_extract_config/")
