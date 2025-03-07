@@ -103,9 +103,7 @@ def main():
             if module == "asyncrat_extract_config":
                 samples = index_samples()
                 for sample in samples:
-                    try:
-                        p = subprocess.Popen(['python', 'modules/asyncrat_extract_config/asyncrat_extract_config.py', f"../../{sample}" ])
-                    except Exception as e:
-                        print(e)
+                    p = subprocess.Popen(['python', 'modules/asyncrat_extract_config/asyncrat_extract_config.py', f"../../{sample}" ])
+                    print(p)
 
 main()
