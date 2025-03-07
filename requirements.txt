@@ -7,3 +7,4 @@ tqdm
 # modules
 ## asyncrat extract config
 backports.pbkdf2
+pythonnet

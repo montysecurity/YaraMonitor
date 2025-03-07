@@ -8,12 +8,12 @@ sys.path.insert(1, "sources")
 parser = argparse.ArgumentParser(description="YaraMonitor: Monitor malware sources with a set of Yara rules")
 parser.add_argument("-d", "--discord", type=str, default=None, help="Send results to Discord Webhook provided")
 parser.add_argument("-w", "--wipe", action="store_true", help="Remove existing files from samples directory when the script starts")
-#parser.add_argument("-l", "--low-storage-mode", action="store_true", help="Automatically delete all samples, regardless of match")
+parser.add_argument("-l", "--low-storage-mode", action="store_true", help="Automatically delete all samples, regardless of match")
 parser.add_argument("-m", "--module", type=str, default=None, help="Invoke module code on samples (NOT OFFICIALLY SUPPORTED YET; WORK IN PROGRESS)")
 args = parser.parse_args()
 discord = args.discord
 wipe = args.wipe
-#auto_delete_all = args.low_storage_mode
+auto_delete_all = args.low_storage_mode
 module = args.module
 
 def run_ingestion():
@@ -96,8 +96,8 @@ def main():
                     samples_matched.add(hex_dig)
         # keep track of samples scanned for the lifetime of the program
         samples_scanned = samples_scanned | hash_list_buf
-        #if auto_delete_all:
-        #    samples_matched = []
+        if auto_delete_all:
+            samples_matched = []
         remove_samples(samples_matched)
         if module is not None:
             if module == "asyncrat_extract_config":
