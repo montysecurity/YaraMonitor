@@ -3,3 +3,7 @@ requests
 pyzipper
 discord_webhook
 tqdm
+
+# modules
+## asyncrat extract config
+backports.pbkdf2
