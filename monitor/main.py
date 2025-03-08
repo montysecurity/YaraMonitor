@@ -113,6 +113,9 @@ def main():
             else:
                 pythonbin = "venv/bin/python"
             if module == "asyncrat_extract_config":
+                if os.system != 'nt':
+                    print("[!] asyncrat_extract_config Module not supported on this OS; requires a Windows OS")
+                    module = None
                 samples = index_samples()
                 for sample in samples:
                     if sample not in asyncrat_scanned_samples:
