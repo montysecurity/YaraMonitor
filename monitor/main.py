@@ -54,7 +54,10 @@ def rename_samples():
         base_name = split_name[0]
         old_extension = split_name[1]
         if old_extension != "infected":
-            os.rename(sample, f"{base_name}.infected")
+            try:
+                os.rename(sample, f"{base_name}.infected")
+            except FileExistsError:
+                os.remove(sample)
 
 def alert(message):
     print(message)
@@ -114,9 +117,6 @@ def main():
                     samples_matched.add(hex_dig)
         # keep track of samples scanned for the lifetime of the program
         samples_scanned = samples_scanned | hash_list_buf
-        if auto_delete_all:
-            samples_matched = []
-        remove_samples(samples_matched)
         if module is not None:
             if os.name == "nt":
                 pythonbin = "venv/Scripts/python.exe"
@@ -135,6 +135,9 @@ def main():
                                 print(e)
                 elif os.name != 'nt':
                     print("[!] asyncrat_extract_config module not supported on this OS; requires a Windows OS")
+        if auto_delete_all:
+            samples_matched = []
+        remove_samples(samples_matched)
         #sleep(60)
 
 main()
