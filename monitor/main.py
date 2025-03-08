@@ -112,7 +112,7 @@ def main():
             if os.name == "nt":
                 pythonbin = "venv/Scripts/python.exe"
             else:
-                pythonbin = "venv/Scripts/python"
+                pythonbin = "venv/bin/python"
             if module == "asyncrat_extract_config":
                 samples = index_samples()
                 for sample in samples:
