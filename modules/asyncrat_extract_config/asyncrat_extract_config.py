@@ -21,12 +21,13 @@ Usage: `asyncrat-config-extractor.py asyncrat.bin`
 import clr,os,base64,binascii,hmac,hashlib,sys,json
 from time import sleep
 
-# got the extraction working, suppressing errors
-class DevNull:
-    def write(self, msg):
-        pass
+# got the extraction working, suppressing errors on Windows
+if os.system == 'nt':
+    class DevNull:
+        def write(self, msg):
+            pass
 
-sys.stderr = DevNull()
+    sys.stderr = DevNull()
 
 current_dir = os.getcwd()
 #print(os.getcwd())
