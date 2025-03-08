@@ -5,6 +5,7 @@
 samples/
 
 *.json
+*.txt
 
 
 # Byte-compiled / optimized / DLL files

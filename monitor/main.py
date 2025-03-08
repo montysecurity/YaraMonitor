@@ -62,6 +62,9 @@ def remove_samples(samples_matched):
             os.remove(sample)
 
 def main():
+    # variables used for modules
+    asyncrat_scanned_samples = set()
+
     i = 0
     global samples_scanned
     samples_scanned = set()
@@ -113,11 +116,13 @@ def main():
             if module == "asyncrat_extract_config":
                 samples = index_samples()
                 for sample in samples:
-                    print(f"[+] Calling {module} on {sample}")
-                    try:
-                        p = subprocess.Popen([pythonbin, 'modules/asyncrat_extract_config/asyncrat_extract_config.py', f"../../{sample}" ])
-                    except Exception as e:
-                        print(e)
-        sleep(60)
+                    if sample not in asyncrat_scanned_samples:
+                        print(f"[+] Calling {module} on {sample}")
+                        try:
+                            p = subprocess.Popen([pythonbin, 'modules/asyncrat_extract_config/asyncrat_extract_config.py', f"../../{sample}" ])
+                            asyncrat_scanned_samples.add(sample)
+                        except Exception as e:
+                            print(e)
+        #sleep(60)
 
 main()

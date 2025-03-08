@@ -202,18 +202,18 @@ for name in reversed(name_mappings.keys()):
         out2 = "".join(letter for letter in out if letter.isprintable())
         if len(out) < 100:
             valid_decryption = True
-            #print(name.split("::")[1] + ": " + out2)
-            new_dict[name.split("::")[1]] = out2
+            new_dict[str(name.split("::")[1]).replace("_", "")] = out2
     except:
         continue
 
 if valid_decryption:
     new_dict["SHA256"] = sha_256
     print(f"[+] Extracted AsyncRAT Config: {new_dict}")
-    fname = "asyncrat_configs.json"
+    fname = "asyncrat_configs.txt"
 
-    f = open(fname, "w+")
+    f = open(fname, "a+")
     f.write(str(json.dumps(new_dict)))
+    f.write("\n")
     f.close()
 
     sleep(1)
