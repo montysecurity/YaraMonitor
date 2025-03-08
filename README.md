@@ -14,7 +14,7 @@ It currently monitors:
 
 ## Caution
 
-The `samples` directory will contain live malware (with executable extensions).
+The `samples` directory will contain malware (with `.infected` extensions).
 
 ## Requirements
 

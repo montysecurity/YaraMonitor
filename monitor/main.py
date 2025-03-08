@@ -47,6 +47,15 @@ def index_samples():
             files.add(str(f"samples/{str(dir)}/{str(file)}"))
     return files
 
+def rename_samples():
+    samples = index_samples()
+    for sample in samples:
+        split_name = str(sample).split(".")
+        base_name = split_name[0]
+        old_extension = split_name[1]
+        if old_extension != "infected":
+            os.rename(sample, f"{base_name}.infected")
+
 def alert(message):
     print(message)
     if discord is not None:
@@ -79,6 +88,7 @@ def main():
             i = 0
         if not scan_only:
             run_ingestion()
+        rename_samples()
         rules = index_rules()
         samples = index_samples()
         hash_list_buf = set()
