@@ -77,7 +77,7 @@ def main():
         if i > 100:
             alert(message="[+] Still Running YaraMonitor")
             i = 0
-        if not scan_only:
+        if not scan_only and not module_only:
             run_ingestion()
         rules = index_rules()
         samples = index_samples()
