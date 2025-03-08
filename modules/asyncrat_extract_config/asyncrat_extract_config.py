@@ -26,8 +26,10 @@ if os.system == 'nt':
     class DevNull:
         def write(self, msg):
             pass
-
     sys.stderr = DevNull()
+else:
+    print("[!] Module not supported on this OS")
+    exit()
 
 current_dir = os.getcwd()
 #print(os.getcwd())
