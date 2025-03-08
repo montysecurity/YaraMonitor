@@ -28,7 +28,7 @@ if os.system == 'nt':
             pass
     sys.stderr = DevNull()
 else:
-    print("[!] Module not supported on this OS")
+    print("[!] asyncrat_extract_config Module not supported on this OS; requires a Windows OS")
     exit()
 
 current_dir = os.getcwd()
