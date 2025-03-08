@@ -11,14 +11,14 @@ parser.add_argument("-w", "--wipe", action="store_true", help="Remove existing f
 parser.add_argument("-l", "--low-storage-mode", action="store_true", help="Automatically delete all samples, regardless of match")
 parser.add_argument("-m", "--module", type=str, default=None, help="Invoke module code on samples")
 parser.add_argument("-s", "--scan-only", action='store_true', default=False, help="Skip ingestion, just run yara rules and modules")
-parser.add_argument("--module-only", default=False, action='store_true', help="only run modules")
+#parser.add_argument("--module-only", default=False, action='store_true', help="only run modules")
 args = parser.parse_args()
 discord = args.discord
 wipe = args.wipe
 auto_delete_all = args.low_storage_mode
 module = args.module
 scan_only = args.scan_only
-module_only = args.module_only
+#module_only = args.module_only
 
 def run_ingestion():
     import malwareBazaar
@@ -77,34 +77,33 @@ def main():
         if i > 100:
             alert(message="[+] Still Running YaraMonitor")
             i = 0
-        if not scan_only and not module_only:
+        if not scan_only:
             run_ingestion()
         rules = index_rules()
         samples = index_samples()
         hash_list_buf = set()
-        if not module_only:
-            for rule in rules:
-                try:
-                    yara_rule = load_rule("rules/" + rule)
-                except yara.SyntaxError: # not sure why this happens, it is inconsistent; also, loading all rules at once fails
+        for rule in rules:
+            try:
+                yara_rule = load_rule("rules/" + rule)
+            except yara.SyntaxError: # not sure why this happens, it is inconsistent; also, loading all rules at once fails
+                continue
+            for sample in samples:
+                hash_object = hashlib.sha256(sample.encode())
+                hex_dig = hash_object.hexdigest()
+                if hex_dig in samples_matched:
+                    #print(f"[+] Skipping {sample} as it has already been scanned")
                     continue
-                for sample in samples:
-                    hash_object = hashlib.sha256(sample.encode())
-                    hex_dig = hash_object.hexdigest()
-                    if hex_dig in samples_matched:
-                        #print(f"[+] Skipping {sample} as it has already been scanned")
-                        continue
-                    # Temporary buffer of samples scanned in this loop
-                    hash_list_buf.add(hex_dig)
-                    print(f"[+] Scanning {str(sample)} with {str(rule)}")
-                    yara_matches = yara_rule.match(sample)
-                    samples_scanned.add(hex_dig)
-                    if len(yara_matches) > 0:
-                        message = f"[+] {str(rule)} triggered on {str(sample)}"
-                        alert(message)
-                        samples_matched.add(hex_dig)
-            # keep track of samples scanned for the lifetime of the program
-            samples_scanned = samples_scanned | hash_list_buf
+                # Temporary buffer of samples scanned in this loop
+                hash_list_buf.add(hex_dig)
+                print(f"[+] Scanning {str(sample)} with {str(rule)}")
+                yara_matches = yara_rule.match(sample)
+                samples_scanned.add(hex_dig)
+                if len(yara_matches) > 0:
+                    message = f"[+] {str(rule)} triggered on {str(sample)}"
+                    alert(message)
+                    samples_matched.add(hex_dig)
+        # keep track of samples scanned for the lifetime of the program
+        samples_scanned = samples_scanned | hash_list_buf
         if auto_delete_all:
             samples_matched = []
         remove_samples(samples_matched)
