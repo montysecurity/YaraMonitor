@@ -136,7 +136,7 @@ def main():
                 elif os.name != 'nt':
                     print("[!] asyncrat_extract_config module not supported on this OS; requires a Windows OS")
         if auto_delete_all:
-            samples_matched = []
+            samples_matched = set()
         remove_samples(samples_matched)
         #sleep(60)
 
